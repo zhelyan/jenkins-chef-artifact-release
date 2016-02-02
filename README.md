@@ -51,7 +51,7 @@ Configure your Jenkins job:
 
     {
       "id": "my_app",
-      "dev": {                           <---------- Dev Environment
+      "dev": {                           <---------- Environment chosen in the dropdown
         "artifacts": [
           {
             "name": "myapp",
