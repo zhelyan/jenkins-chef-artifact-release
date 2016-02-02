@@ -4,7 +4,7 @@ Jenkins plugin adding some basic integration with Chef.
  
 ## Prerequisites
 
-- Needs the chef-api plugin ( https://github.com/zhelyan/chef-api ) (The Jenkins Chef server client should have admin privileges.)
+- Needs the chef-api plugin ( https://github.com/zhelyan/jenkins-chef-api ) (The Jenkins Chef server client should have admin privileges.)
 - Tested against Chef server 11 only
 
 ## Note
