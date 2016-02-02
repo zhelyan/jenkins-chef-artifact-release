@@ -1,0 +1,161 @@
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:c="jelly:core">
+    <script>
+//TODO expose both dropdown and textbox (which takes env variables) for data bag item
+        var descr = <st:bind value="${descriptor}"/>
+        var dbagsId = "databagsSelect";
+       // var dbagItemsId = "databagItemsSelect";
+
+
+        var json;
+        //<![CDATA[
+        function removeOptions(obj) {
+            if (obj == null) return;
+            if (obj.options == null) return;
+            obj.options.length = 0;
+        }
+
+        function addOptions(obj, options, defaultVal){
+           var opt = createOption("Please select","", null);
+           obj.appendChild(opt);
+           for (var i = 0; i < options.length; i++){
+                var val = options[i];
+                var opt = createOption(val,val, defaultVal);
+                obj.appendChild(opt);
+            }
+        }
+
+            function createOption(label, value, selected){
+                var opt = document.createElement('option');
+                opt.value = value;
+                if(value == selected){
+                    opt.selected='selected';
+                }
+                opt.innerHTML = label;
+                return opt;
+            }
+
+          function updateDatabagItemsSelect(databag, selectedVal){
+
+            if(!databag){
+                setErrorMsg("Select databag", "dbError");
+                 return;
+            }
+           else{
+               setErrorMsg("", "dbError");
+            }
+            //save value to entry
+            document.getElementById("dbag").value=databag;
+
+          }
+
+         function setErrorMsg(err, id){
+            document.getElementById(id).innerHTML=err;
+         }
+
+         function checkDBI(){
+             var databagItemsSelect = document.getElementById(dbagItemsId);
+             if(databagItemsSelect.options[databagItemsSelect.selectedIndex].value == ""){
+                setErrorMsg("Select databag item",'dbiError');
+             }else{
+                setErrorMsg("",'dbiError');
+             }
+         }
+        /*
+            called every time chef config changes + at page load IF instance !=null / we are editing, not setting up/
+         */
+        function updateConfig(configEl, savedDB, savedDBI){
+            // clear any errors
+            setErrorMsg('','chefError');
+            // clear databags/databag items
+            json=null;
+            //get bot databag and databag items selects
+            var databagsSelect = document.getElementById(dbagsId);
+            //var databagItemsSelect = document.getElementById(dbagItemsId);
+            var configSelect = document.getElementById(configEl);
+            //what's the selected config
+            var config = configSelect.options[configSelect.selectedIndex].value;
+            //clear select options
+            removeOptions(databagsSelect);
+            //removeOptions(databagItemsSelect);
+            // nothing to do if no config is selected
+            if(!config) {
+                setErrorMsg("Select Chef server!", 'chefError');
+                return false;
+            }
+
+            //call Javascript proxy in descriptor which does the actual work
+            descr.getDatabagsForConfig(config,function(t) {
+               json = t.responseObject();
+                    //any forwarded errors??
+               if (json['error']){
+                setErrorMsg(json['error'], 'chefError');
+                return false;
+               }
+               //extract keys = databags
+               var databags =[];
+               for(key in json){
+                databags.push(key);
+               }
+               databags.sort();
+               //push databags to select, savedDB is the databag saved before the job edit
+               addOptions(databagsSelect, databags, savedDB);
+               //update databag items select based on the actual selected databag
+               var selectedDb = databagsSelect.options[databagsSelect.selectedIndex].value;
+
+               if(selectedDb==""){
+                    setErrorMsg("Select databag", "dbError");
+                    return;
+               }
+               else{
+                    setErrorMsg("", "dbError");
+               }
+               updateDatabagItemsSelect(selectedDb, savedDBI);
+
+            });
+
+    }
+    //]]>
+    </script>
+    <j:choose>
+        <j:when test="${descriptor.getCredentials().isEmpty()}">
+            <f:entry field="error">
+                <f:readOnlyTextbox value="No Chef configurations found, Add some in the | Credentials | section"/>
+            </f:entry>
+        </j:when>
+        <j:otherwise>
+            <f:entry title="${%envVar}" field="envVar">
+                <f:textbox/>
+            </f:entry>
+            <f:entry title="${%artifactVars}" field="artifactVars">
+                <f:textbox/>
+            </f:entry>
+            <f:entry field="credentialId" title="Select Chef server">
+                <select id="config" name="credentialId" onchange="updateConfig(this.id, null, null)" >
+                    <f:option value="">Please select...</f:option>
+                    <j:forEach var="c" items="${descriptor.credentials}">
+                        <f:option selected="${c.id == instance.credentialId}" value="${c.id}">${c.description}</f:option>
+                    </j:forEach>
+                </select>
+                <div id="chefError" style="height:20px;width:auto;color:red;font-weight: bold"/>
+            </f:entry>
+            <f:entry title="${%databag}" >
+                <select  id="databagsSelect"  onchange="savedBD=null;updateDatabagItemsSelect(this.options[this.selectedIndex].value)">
+                </select>
+                <div id="dbError" style="height:20px;width:auto;color:red;font-weight: bold"/>
+            </f:entry>
+            <f:invisibleEntry style="display:none;height:0px" >
+                <f:textbox id="dbag" style="display:none;height:0px" field="databag" />
+            </f:invisibleEntry>
+            <f:entry title="${%databagItem}" field="databagItem">
+                <f:textbox id="dbagItem"  />
+            </f:entry>
+        </j:otherwise>
+        <c:if test="${instance.credentialId != null}">
+            <script>
+                var savedDB =  document.getElementById("dbag").value;
+                var savedDBI =  document.getElementById("dbagItem").value;
+                updateConfig("config", savedDB, savedDBI);
+            </script>
+        </c:if>
+    </j:choose>
+</j:jelly>

@@ -1,0 +1,63 @@
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+    <l:layout title="Environment report" css="/plugin/chef-wrapper/css/style.css">
+        <l:main-panel>
+            <j:set var="data" value="${it.getEnvironments()}" />
+            <j:forEach indexVar="i" var="env" items="${data}">
+                <j:if test="${i > 0}">
+                    <br/>
+                </j:if>
+                <div style="width:800px; margin:0 auto;">
+                    <h1>${env.name}</h1>
+                    <br/>
+                    <div id="tabs">
+                        <table class="sortable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="number">BUILD</th>
+                                    <th data-sort="string">DEPLOYED ARTIFACTS</th>
+                                    <th data-sort="date">STATUS</th>
+                                    <th data-sort="string">LOGS</th>
+                                    <th data-sort="date">STARTED</th>
+                                    <th data-sort="date">FINISHED</th>
+                                    <th data-sort="date">DURATION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach indexVar="i" var="depl" items="${env.deployments}">
+                                    <tr>
+                                        <td><a href="../${depl.buildNumber}">${depl.buildNumber}</a></td>
+                                        <td>
+                                            <table class="sortable">
+                                                <thead>
+                                                    <tr>
+                                                        <th data-sort="string">Artifact ${i}</th>
+                                                        <th data-sort="string">Version</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <j:forEach var="artifact" items="${depl.artifacts}">
+                                                        <tr>
+                                                            <td>${artifact.name}</td>
+                                                            <td>${artifact.version}</td>
+                                                        </tr>
+                                                    </j:forEach>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>${depl.status}</td>
+                                        <td><a href="../${depl.buildNumber}/console">console</a></td>
+                                        <td>${depl.started}</td>
+                                        <td>${depl.finished}</td>
+                                        <td>${depl.duration}</td>
+                                    </tr>
+                                </j:forEach>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </j:forEach>
+
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

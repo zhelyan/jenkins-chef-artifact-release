@@ -1,0 +1,33 @@
+<!--
+  - The MIT License
+  -
+  - Copyright (c) 2009-2011, Manufacture Française des Pneumatiques Michelin, Romain Seguy
+  -
+  - Permission is hereby granted, free of charge, to any person obtaining a copy
+  - of this software and associated documentation files (the "Software"), to deal
+  - in the Software without restriction, including without limitation the rights
+  - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  - copies of the Software, and to permit persons to whom the Software is
+  - furnished to do so, subject to the following conditions:
+  -
+  - The above copyright notice and this permission notice shall be included in
+  - all copies or substantial portions of the Software.
+  -
+  - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  - IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  - THE SOFTWARE.
+  -->
+
+<div>
+    Provides 2 separate functionalities:
+    Build Parameter: Provides a new build parameter type : 'List Chef environments' allowing the user to retrieve the list of
+    available Chef environments in a drop down list;
+    <br/>
+    Build wrapper: Given an environment build parameter/variable and one or more parameters specifying the artifacts you want to deploy, will save these in a data bag item along with some more information about the status of the build.<br/>
+    The data bag item will be updated twice: when the job starts and when it finishes.<br/>
+    Environment report page will be generated showing 'what got deployed where'.
+</div>

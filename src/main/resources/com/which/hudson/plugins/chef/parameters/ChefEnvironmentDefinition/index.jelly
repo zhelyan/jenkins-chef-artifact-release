@@ -1,0 +1,22 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+     <j:choose>
+         <j:when test="${it.choices == null}">
+             <f:readOnlyTextbox value="Add new Chef Server in the 'Credentials' section"/>
+         </j:when>
+         <j:otherwise>
+             <f:entry title="${it.name}" description="${it.description}">
+                 <div name="parameter" description="${it.description}">
+                     <input type="hidden" name="name" value="${it.name}"/>
+                     <input type="hidden" name="description" value="${it.description}"/>
+                     <select name="value" style="width:100px; margin-left: 15px;">
+                         <j:forEach var="env" items="${it.choices}" varStatus="loop">
+                             <option value="${env}">${env}</option>
+                         </j:forEach>
+                     </select>
+                 </div>
+             </f:entry>
+         </j:otherwise>
+     </j:choose>
+
+</j:jelly>

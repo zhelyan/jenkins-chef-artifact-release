@@ -1,0 +1,24 @@
+<!--<?jelly escape-by-default='true'?>-->
+<j:jelly  xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"  xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:u="/util" xmlns:w="/warnings" >
+
+    <f:entry field="credentialId" title="Select Chef server">
+        <select name="credentialId">
+            <f:option value="">Please select...</f:option>
+            <j:forEach var="c" items="${descriptor.credentials}">
+                <f:option selected="${c.id == instance.credentialId}" value="${c.id}">${c.description}</f:option>
+            </j:forEach>
+        </select>
+    </f:entry>
+    <f:entry title="Name" field="name">
+        <f:textbox field="name" name="parameter.name" value="${instance.name}"/>
+    </f:entry>
+
+    <f:entry title="Exclude regex" >
+            <f:repeatableProperty minimum="0" field="excludes"/>
+     </f:entry>
+
+    <f:entry title="Description" field="description">
+        <f:textarea/>
+    </f:entry>
+
+</j:jelly>
