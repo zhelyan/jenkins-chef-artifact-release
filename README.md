@@ -13,6 +13,11 @@ Jenkins plugin adding some basic integration with Chef.
 - The functionality provided by this plugin should be weeded out into separate plugins. 
 - Pull requests are welcomed and I will do my best to maintain the plugin but might have to source other maintainers at some later stage. 
 
+## Installation
+
+* Build: `mvn package`
+* Go to `<JENKINS>/pluginManager/advanced` and upload `<THIS_REPO>/target/chef-wrapper.hpi`
+
 
 ## This plugin provides:
 
