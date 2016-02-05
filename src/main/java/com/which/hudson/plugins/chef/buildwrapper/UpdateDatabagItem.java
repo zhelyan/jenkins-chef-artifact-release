@@ -162,7 +162,7 @@ public class UpdateDatabagItem extends BuildWrapper {
     }
 
     private void saveToDataBagItem(String databagItem, Deployment deployment, boolean cleanup) throws ChefApiBuilder.ConfigurationException, IOException, InterruptedException {
-        ChefApi chefApi = ChefApiBuilder.INSTANCE.build(credentialId);
+        ChefApi chefApi = ChefApiBuilder.build(credentialId);
         JSONObject obj = JSONObject.fromObject(chefApi.getDatabagItem(databag, databagItem).toString());
         String key = deployment.getEnvironment();
         if (cleanup) {
@@ -221,6 +221,9 @@ public class UpdateDatabagItem extends BuildWrapper {
          * @return
          */
         public FormValidation doCheckArtifactVars(@QueryParameter String artifactVars) {
+            if (artifactVars == null || artifactVars.isEmpty()){
+                return FormValidation.error("Value(s) missing");
+            }
             if (artifactVars.contains(" ")) {
                 //comma separated list
                 if (artifactVars.split(",").length > 1) {
@@ -269,7 +272,7 @@ public class UpdateDatabagItem extends BuildWrapper {
         public JSONObject getDatabagsForConfig(String credentialId) {
             Map<String, List<String>> jsondata = new TreeMap<String, List<String>>();
             try {
-                ChefApi api = ChefApiBuilder.INSTANCE.build(credentialId);
+                ChefApi api = ChefApiBuilder.build(credentialId);
                 Map<String, Collection<String>> dbis = DatabagRetriever.getDatabags(api).asMap();
                 for (String databag : dbis.keySet()) {
                     jsondata.put(databag, new LinkedList<String>(dbis.get(databag)));

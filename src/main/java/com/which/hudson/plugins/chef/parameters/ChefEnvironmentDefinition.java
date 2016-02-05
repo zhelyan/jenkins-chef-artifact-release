@@ -90,7 +90,7 @@ public class ChefEnvironmentDefinition extends ParameterDefinition {
         //TODO figure out how to fire error message instead of returning error as value
         ChefApi chefApi;
         try {
-            chefApi = ChefApiBuilder.INSTANCE.build(credentialId);
+            chefApi = ChefApiBuilder.build(credentialId);
         } catch (ChefApiBuilder.ConfigurationException e) {
             e.printStackTrace();
             return Arrays.asList(ExceptionUtils.getRootCauseMessage(e));
