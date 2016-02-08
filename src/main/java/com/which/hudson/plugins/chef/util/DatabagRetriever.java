@@ -3,6 +3,7 @@ package com.which.hudson.plugins.chef.util;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 import org.jclouds.chef.ChefApi;
+import org.jclouds.chef.domain.DatabagItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,6 +11,11 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class DatabagRetriever {
+
+
+    private DatabagRetriever(){
+        super();
+    }
 
     /**
      * Retrieves databags and associated data bag items.
@@ -22,15 +28,6 @@ public class DatabagRetriever {
         ExecutorService exec = Executors.newFixedThreadPool(processors);
 
         List<String> databags = new LinkedList<String>(api.listDatabags());
-
-//        ThreadPoolExecutor exec = new ThreadPoolExecutor(processors, // core size
-//                databags.size(), // max size
-//                10*60, // idle timeout
-//                TimeUnit.SECONDS,
-//                new ArrayBlockingQueue<Runnable>(databags.size()));
-//
-
-
 
         List<Callable<Multimap<String,String>>> callables =  new ArrayList<Callable<Multimap<String,String>>>();
         for (String databag : databags) {

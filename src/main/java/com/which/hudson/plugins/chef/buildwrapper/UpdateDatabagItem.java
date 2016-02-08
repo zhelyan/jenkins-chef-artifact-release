@@ -19,6 +19,7 @@ import hudson.security.ACL;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.FormValidation;
+import jenkins.model.CauseOfInterruption;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -113,6 +114,7 @@ public class UpdateDatabagItem extends BuildWrapper {
         } catch (ChefApiBuilder.ConfigurationException e) {
             listener.getLogger().printf("[chef-buildwrapper] (set-up) failed to update data bag item '%s/%s'\n", databag, databagItemValue);
             listener.getLogger().printf("[chef-buildwrapper] Error:: '%s'", ExceptionUtils.getRootCauseMessage(e));
+            build.getExecutor().interrupt(Result.FAILURE);
         }
         final String newDatabagItemValue = databagItemValue;
         return new Environment() {
@@ -130,7 +132,7 @@ public class UpdateDatabagItem extends BuildWrapper {
                 } catch (ChefApiBuilder.ConfigurationException e) {
                     listener.getLogger().printf("[chef-buildwrapper] (tear-down) failed to update data bag item '%s/%s'\n", databag, newDatabagItemValue);
                     listener.getLogger().printf("[chef-buildwrapper] Error:: '%s'\n", ExceptionUtils.getRootCauseMessage(e));
-                    //ignore
+                    // ignore
                 }
 
                 return true;
@@ -163,7 +165,11 @@ public class UpdateDatabagItem extends BuildWrapper {
 
     private void saveToDataBagItem(String databagItem, Deployment deployment, boolean cleanup) throws ChefApiBuilder.ConfigurationException, IOException, InterruptedException {
         ChefApi chefApi = ChefApiBuilder.build(credentialId);
-        JSONObject obj = JSONObject.fromObject(chefApi.getDatabagItem(databag, databagItem).toString());
+        DatabagItem dbi = chefApi.getDatabagItem(databag, databagItem);
+        if(dbi == null){
+            throw new ChefApiBuilder.ConfigurationException(String.format("Data Bag Item %s/%s not found!", databag, databagItem ));
+        }
+        JSONObject obj = JSONObject.fromObject(dbi.toString());
         String key = deployment.getEnvironment();
         if (cleanup) {
             obj.discard(key);
@@ -172,10 +178,9 @@ public class UpdateDatabagItem extends BuildWrapper {
         JSONObject oldData = (JSONObject) obj.get(key);
         oldData.putAll(JSONObject.fromObject(deployment));
         obj.put(key, oldData);
-        DatabagItem dbi = new DatabagItem(databagItem, obj.toString());
+        dbi = new DatabagItem(databagItem, obj.toString());
         chefApi.updateDatabagItem(databag, dbi);
     }
-
 
     public String getArtifactVars() {
         return artifactVars;
@@ -284,6 +289,5 @@ public class UpdateDatabagItem extends BuildWrapper {
         }
 
     }
-
 
 }
