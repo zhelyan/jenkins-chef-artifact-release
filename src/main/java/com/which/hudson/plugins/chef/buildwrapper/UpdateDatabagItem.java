@@ -113,7 +113,7 @@ public class UpdateDatabagItem extends BuildWrapper {
             listener.getLogger().printf("[chef-buildwrapper] package version(s) saved to data bag item %s/%s\n", databag, databagItemValue);
         } catch (ChefApiBuilder.ConfigurationException e) {
             listener.getLogger().printf("[chef-buildwrapper] (set-up) failed to update data bag item '%s/%s'\n", databag, databagItemValue);
-            listener.getLogger().printf("[chef-buildwrapper] Error:: '%s'", ExceptionUtils.getRootCauseMessage(e));
+            listener.getLogger().printf("[chef-buildwrapper] Error:: '%s'\n", ExceptionUtils.getRootCauseMessage(e));
             build.getExecutor().interrupt(Result.FAILURE);
         }
         final String newDatabagItemValue = databagItemValue;
