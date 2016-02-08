@@ -19,6 +19,9 @@ Jenkins plugin adding some basic integration with Chef.
 * Build: `mvn package`
 * Go to `<JENKINS>/pluginManager/advanced` and upload `<THIS_REPO>/target/chef-wrapper.hpi`
 
+## Configuration
+
+See the [Wiki](https://github.com/zhelyan/jenkins-chef-wrapper/wiki)
 
 ## This plugin provides:
 
