@@ -29,7 +29,7 @@ public class ChefReportProjectAction implements ProminentProjectAction {
     }
 
     public String getIconFileName() {
-        return "/plugin/chef-wrapper/report.png";
+        return "/plugin/chef-artifact-release/report.png";
     }
 
 

@@ -1,6 +1,6 @@
-# chef-wrapper
+# chef-artifact-release
 
-Jenkins plugin adding some basic integration with Chef.
+Lets Jenkins save details about your build artifacts to the Chef server and maintain an environment dashboard of what got deployed where.
  
 ## Prerequisites
 
@@ -17,8 +17,11 @@ Jenkins plugin adding some basic integration with Chef.
 ## Installation
 
 * Build: `mvn package`
-* Go to `<JENKINS>/pluginManager/advanced` and upload `<THIS_REPO>/target/chef-wrapper.hpi`
+* Go to `<JENKINS>/pluginManager/advanced` and upload `<THIS_REPO>/target/chef-artifact-release.hpi`
 
+## Configuration
+
+See the [Wiki](https://github.com/zhelyan/jenkins-chef-artifact-release/wiki)
 
 ## This plugin provides:
 
@@ -95,3 +98,6 @@ In your application cookbook, retrieve your application's artifacts:
 
 This is essentially the details captured by the build wrapper presented in a tabular form and grouped by environment.
 The report is available for both individual builds and on project level.
+
+
+![image](https://github.com/zhelyan/jenkins-chef-artifact-release/wiki/media/report.png)
