@@ -8,7 +8,7 @@
     </parent>
 
 
-    <artifactId>chef-wrapper</artifactId>
+    <artifactId>chef-artifact-release</artifactId>
     <packaging>hpi</packaging>
     <name>Chef wrapper</name>
     <version>1.2.2</version>

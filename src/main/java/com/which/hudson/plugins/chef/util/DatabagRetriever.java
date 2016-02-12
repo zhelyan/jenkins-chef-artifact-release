@@ -3,7 +3,6 @@ package com.which.hudson.plugins.chef.util;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 import org.jclouds.chef.ChefApi;
-import org.jclouds.chef.domain.DatabagItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
