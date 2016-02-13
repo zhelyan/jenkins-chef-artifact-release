@@ -6,7 +6,6 @@ Lets Jenkins save details about your build artifacts to the Chef server and main
 
 - Needs the chef-api plugin ( https://github.com/zhelyan/jenkins-chef-api ) (The Jenkins Chef server client should have admin privileges.)
 - Token macro plugin
-- Tested against Chef server 11 only
 
 ## Note
 
